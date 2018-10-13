@@ -43,26 +43,35 @@
                 <tbody>
                   <tr ng-repeat='notice in notices | filter:searchText'>
                     <td>{[{ notice.id }]}</td>
-                    <td ng-bind-html="notice.msg | limitTo: 100"></td>
+                    <td ng-bind-html="notice.msg | trusted"></td>
                     <td>{[{ notice.name }]}</td>                    
                     <td>{[{notice.tags}]}</td>
                     <td><a href="https://www.twitter.com/{[{notice.twitter}]}" target="_blank">@{[{notice.twitter}]}</a></td>
                     <td>{[{notice.status}]}</td>
-                    <td><a href="/view/{[{ notice.id }]}" class="btn btn-success">View</a>&nbsp;<a href="/update" class="btn btn-info" >Update</a></td>
+                    <td><a href="/view/{[{ notice.id }]}" class="btn btn-success">View</a>&nbsp;<a href="/update/{[{ notice.id }]}" class="btn btn-info" >Update</a></td>
                   </tr>
                 </tbody>
               </table>
               
     </main>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular-sanitize.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular-sanitize.js"></script>
     <script>
         var app = angular.module('myApp' ,['ngSanitize']).config(function($interpolateProvider){
             $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
         });
-        app.controller("MainCtrl", function($scope){
+        app.controller("MainCtrl",function($scope){
             $scope.notices = {{ notices | safe }};
         });
+
+        app.filter('trusted', ['$sce', function($sce) {
+            var div = document.createElement('div');
+            return function(text) {
+                div.innerHTML = text;
+                return $sce.trustAsHtml(div.textContent);
+            };
+        }])
+
     </script>
 </body>
 </html>

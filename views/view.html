@@ -17,13 +17,13 @@
 
     <main role="main" class="container" style="padding-top:20px;" ng-controller="MainCtrl">
         <div ng-repeat='notice in notices'>
-        <p><strong>Issue:</strong></p>
-        <p ng-bind-html="notice.msg"></p>
-        <hr/>
-        <p>submitted by: <strong>{[{ notice.name }]}</strong></p>
-        <p><strong>twitter:</strong> <a href="https://www.twitter.com/{[{notice.twitter}]}" target="_blank">@{[{notice.twitter}]}</a></p>
-        <p><strong>Tags:</strong> {[{notice.tags}]}</p>
-        <p><strong>Status:</strong> {[{notice.status}]}</p>
+            <p><strong>Issue:</strong></p>
+            <p ng-bind-html="notice.msg"></p>
+            <hr/>
+            <p>submitted by: <strong>{[{ notice.name }]}</strong></p>
+            <p><strong>twitter:</strong> <a href="https://www.twitter.com/{[{notice.twitter}]}" target="_blank">@{[{notice.twitter}]}</a></p>
+            <p><strong>Tags:</strong> {[{notice.tags}]}</p>
+            <p><strong>Status:</strong> {[{notice.status}]}</p>
         </div>
     </main>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
