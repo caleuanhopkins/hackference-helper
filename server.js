@@ -10,6 +10,7 @@ const pool = new Pool({
 });
 const _ = require('underscore');
 const crypto = require('crypto');
+const axios = require('axios');
 
 const secret = '2hYj5C9XHdPEKFUMmrxwKbQY';
 
@@ -64,12 +65,12 @@ app.get('/update/:id', async (req, res) => {
         const result = await client.query('SELECT id,name,msg,tags,twitter,status FROM helpnotice where id = $1', [req.params.id]);
         const notice = (result) ? result.rows : null;
         client.release();        
-        if(!Array.isArray(notice[0].tags)){
+        if(!Array.isArray(JSON.parse(notice[0].tags))){
             var tags = '['+notice[0].tags+']';
         }else{
-            var tags = notice[0].tags;
+            var tags = JSON.parse(notice[0].tags);
         }
-        res.render('update.html', {notice:notice, issue: _.unescape(notice[0].msg), tags:JSON.parse(tags), error:false});
+        res.render('update.html', {notice:notice, issue: _.unescape(notice[0].msg), tags:tags, error:false});
     } catch (err) {
         console.error(err);
         res.send("Error " + err);
@@ -90,7 +91,7 @@ app.post('/update/:id', async (req, res) => {
 
         console.log(passcode);
         let msg = _.escape(data.msg);
-        let tags = JSON.stringify(data.tags);
+        let tags = JSON.stringify([data.tags]);
 
 
         if(notice[0].passcode === passcode){
@@ -108,7 +109,7 @@ app.post('/update/:id', async (req, res) => {
             }else{
                 try {
                     const client = await pool.connect()
-                    let insert = await client.query('update helpnotice set name=$1, msg=$2, status=$3, twitter=$4, tags =$5 WHERE id=$6',[data.name, msg, data.status, data.twitter, tags, data.id]);
+                    let insert = await client.query('update helpnotice set name=$1, msg=$2, status=$3, twitter=$4, tags=$5 WHERE id=$6',[data.name, msg, data.status, data.twitter, tags, data.id]);
                     client.release();
                     res.redirect('/');
                 } catch (err) {
@@ -144,8 +145,17 @@ app.post('/submit', async (req, res) => {
 
         try {
             const client = await pool.connect()
-            let insert = await client.query('INSERT INTO helpnotice(name, passcode, msg, status, twitter, tags) values($1, $2, $3, $4, $5, $6)',[data.name, passcode, msg, data.status, data.twitter, tags]);
+            let insert = await client.query('INSERT INTO helpnotice(name, passcode, msg, status, twitter, tags) values($1, $2, $3, $4, $5, $6)  RETURNING id',[data.name, passcode, msg, data.status, data.twitter, tags]);
             client.release();
+            axios.post('https://hooks.slack.com/services/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', {
+                text: 'New Help Request Submitted: https://hackference-helper.herokuapp.com/view/'+insert.rows[0].id,
+              })
+              .then(function (response) {
+                console.log(response);
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
             res.redirect('/');
         } catch (err) {
             console.error(err);
@@ -160,7 +170,6 @@ app.get('/', async (req, res) => {
         const client = await pool.connect()
         const result = await client.query('SELECT id,name,msg,tags,twitter,status FROM helpnotice order by id');
         const results = (result) ? result.rows : null;
-        console.log(results);
         client.release();
         res.render('home.html', { notices: JSON.stringify(results)});
     } catch (err) {
