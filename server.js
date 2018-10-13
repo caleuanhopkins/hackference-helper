@@ -103,7 +103,6 @@ app.get('/', async (req, res) => {
         console.log(results);
         client.release();
         res.render('home.html', { notices: JSON.stringify(results)});
-
     } catch (err) {
         console.error(err);
         res.send("Error " + err);

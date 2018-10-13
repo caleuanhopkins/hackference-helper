@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    <title></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-bs4.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-light bg-light justify-content-between">
+        <a class="navbar-brand"></a>
+        <a class="nav-item nav-link active" href="#">Add <span class="sr-only">(current)</span></a>
+    </nav>
+
+    <main role="main" class="container" style="padding-top:20px;" ng-controller="MainCtrl">
+        <h2>Submit Help Notice</h2>
+        <p>Add your name, a description of your issue and your twitter handle (optional) so people can find you!</p> 
+        <p>Remember to describe the problem as simple and clearly as possible and add relevant tags to help people identify if they can help with your issue or not.</p> 
+        <div class="row">
+            <div class="col-md-12 order-md-1">
+                <h4 class="mb-3">Submit</h4>
+                <form action="submit" method="POST">
+                    <div class="row mb-3">
+                        <div class="col-md-12 order-md-1">
+                            <label for="name">Full Name</label>
+                            <input type="text" name="name" class="form-control" id="name" placeholder="" value="" required="" style="">
+                        </div>
+                    </div>  
+                    <div class="row mb-3">
+                        <div class="col-md-12 order-md-1">
+                            <label for="twitter">Twitter handle (optional)</label>
+                            <input type="text" class="form-control" name="twitter" id="twitter" placeholder="Username without the @" value="" style="">
+                        </div>
+                    </div>  
+                    <div class="row mb-3">
+                        <div class="col-md-12 order-md-1">
+                            <label for="summernote">Issue</label>
+                            <textarea type="text" class="form-control" name="msg" id="summernote" placeholder="" value="" required="" style=""></textarea>
+                        </div>
+                    </div>    
+                    <div class="row mb-3">
+                        <div class="col-md-12 order-md-1">
+                            <label for="status">Status</label>
+                            <select class="form-control" id="status" name="status">
+                                <option>open</option>
+                                <option>urgent</option>
+                                <option>minor</option>
+                            </select>                        
+                        </div>
+                    </div>   
+                    <div class="row mb-3">
+                        <div class="col-md-12 order-md-1">
+                            <label for="tags">Tags</label>
+                            <select class="form-control" multiple="" id="tags" name="tags">
+                            </select>                        
+                        </div>
+                    </div>   
+                    <div class="row mb-3">
+                        <div class="col-md-12 order-md-1">
+                            <label for="passcode">Memorable Word <small>(used as a passcode for updating the notice)</small></label>
+                            <input type="text" name="passcode" class="form-control" id="passcode" placeholder="" value="" required="" style="">
+                        </div>
+                    </div> 
+                    <hr class="mb-4">
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">Submit</button> 
+                </form> 
+            </div>
+        </div>
+        
+    </main>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-bs4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js" integrity="sha256-FcVIknBiVRk5KLQeIBb9VQdtFRMqwffXyZ+D8q0gQro=" crossorigin="anonymous"></script>
+    <script>
+        $('#summernote').summernote({
+            placeholder: 'Enter your issue description here...',
+            tabsize: 2,
+            height: 100
+        });
+        $("#tags").select2({
+            tags: true
+        });
+      </script>
+</body>
+</html>
