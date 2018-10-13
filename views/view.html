@@ -17,7 +17,9 @@
 
     <main role="main" class="container" style="padding-top:20px;" ng-controller="MainCtrl">
         <div ng-repeat='notice in notices'>
+        <p><strong>Issue:</strong></p>
         <p ng-bind-html="notice.msg"></p>
+        <hr/>
         <p>submitted by: <strong>{[{ notice.name }]}</strong></p>
         <p><strong>twitter:</strong> <a href="https://www.twitter.com/{[{notice.twitter}]}" target="_blank">@{[{notice.twitter}]}</a></p>
         <p><strong>Tags:</strong> {[{notice.tags}]}</p>
