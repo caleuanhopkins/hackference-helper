@@ -32,8 +32,8 @@
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th scope="col">Name</th>
                     <th scope="col">Issue</th>
+                    <th scope="col">Name</th>
                     <th scope="col">Tags</th>
                     <th scope="col">Twitter</th>
                     <th scope="col">Status</th>
@@ -44,6 +44,7 @@
                   <tr ng-repeat='notice in notices | filter:searchText'>
                     <td>{[{ notice.id }]}</td>
                     <td ng-bind-html="notice.msg | limitTo: 100"></td>
+                    <td>{[{ notice.name }]}</td>                    
                     <td>{[{notice.tags}]}</td>
                     <td><a href="https://www.twitter.com/{[{notice.twitter}]}" target="_blank">@{[{notice.twitter}]}</a></td>
                     <td>{[{notice.status}]}</td>
