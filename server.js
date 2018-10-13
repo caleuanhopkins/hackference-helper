@@ -88,20 +88,34 @@ app.post('/update/:id', async (req, res) => {
             .update(data.passcode)
             .digest('hex');
 
+        console.log(passcode);
         let msg = _.escape(data.msg);
         let tags = JSON.stringify(data.tags);
 
 
         if(notice[0].passcode === passcode){
-            try {
-                const client = await pool.connect()
-                let insert = await client.query('update helpnotice set name=$1, msg=$2, status=$3, twitter=$4, tags =$5 WHERE id=$6',[data.name, msg, data.status, data.twitter, tags, data.id]);
-                client.release();
-                res.redirect('/');
-            } catch (err) {
-                console.error(err);
-                res.send("Error " + err);
-            }      
+
+            if(data.status === 'closed'){
+                try {
+                    const client = await pool.connect()
+                    let insert = await client.query('delete from helpnotice WHERE id=$1',[data.id]);
+                    client.release();
+                    res.redirect('/');
+                } catch (err) {
+                    console.error(err);
+                    res.send("Error " + err);
+                }         
+            }else{
+                try {
+                    const client = await pool.connect()
+                    let insert = await client.query('update helpnotice set name=$1, msg=$2, status=$3, twitter=$4, tags =$5 WHERE id=$6',[data.name, msg, data.status, data.twitter, tags, data.id]);
+                    client.release();
+                    res.redirect('/');
+                } catch (err) {
+                    console.error(err);
+                    res.send("Error " + err);
+                }  
+            }    
         }else{
             console.error('passcode not match');
             res.send("Error: passcode not match did not update ");         
