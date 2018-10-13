@@ -18,7 +18,7 @@
     <main role="main" class="container" style="padding-top:20px;" ng-controller="MainCtrl">
         <div ng-repeat='notice in notices'>
             <p><strong>Issue:</strong></p>
-            <p ng-bind-html="notice.msg"></p>
+            <p ng-bind-html="notice.msg | trusted"></p>
             <hr/>
             <p>submitted by: <strong>{[{ notice.name }]}</strong></p>
             <p><strong>twitter:</strong> <a href="https://www.twitter.com/{[{notice.twitter}]}" target="_blank">@{[{notice.twitter}]}</a></p>
@@ -26,8 +26,8 @@
             <p><strong>Status:</strong> {[{notice.status}]}</p>
         </div>
     </main>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular-sanitize.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular-sanitize.js"></script>
     <script>
         var app = angular.module('myApp' ,['ngSanitize']).config(function($interpolateProvider){
             $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
@@ -35,6 +35,14 @@
         app.controller("MainCtrl", function($scope){
             $scope.notices = {{ notice | safe }};
         });
+
+        app.filter('trusted', ['$sce', function($sce) {
+            var div = document.createElement('div');
+            return function(text) {
+                div.innerHTML = text;
+                return $sce.trustAsHtml(div.textContent);
+            };
+        }])
     </script>
 </body>
 </html>
