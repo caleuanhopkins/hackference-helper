@@ -64,7 +64,12 @@ app.get('/update/:id', async (req, res) => {
         const result = await client.query('SELECT id,name,msg,tags,twitter,status FROM helpnotice where id = $1', [req.params.id]);
         const notice = (result) ? result.rows : null;
         client.release();        
-        res.render('update.html', {notice:notice, issue: _.unescape(notice[0].msg), tags:JSON.parse(notice[0].tags), error:false});
+        if(!Array.isArray(notice[0].tags)){
+            var tags = '['+notice[0].tags+']';
+        }else{
+            var tags = notice[0].tags;
+        }
+        res.render('update.html', {notice:notice, issue: _.unescape(notice[0].msg), tags:JSON.parse(tags), error:false});
     } catch (err) {
         console.error(err);
         res.send("Error " + err);
