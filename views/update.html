@@ -92,6 +92,10 @@
         tags: true
     });
     var thetags = '{{notice[0].tags}}'; //
+
+    if(!thetags.isArray()){
+        thetags = [thetags]
+    }
   </script>
 </body>
 </html>
