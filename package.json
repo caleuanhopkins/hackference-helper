@@ -10,7 +10,7 @@
     "express": "^4.16.4",
     "nunjucks": "^3.2",
     "pg": "^7.5.0",
-    "underscore": "^1.9.1"
+    "underscore": "^1.12.1"
   },
   "devDependencies": {},
   "scripts": {
